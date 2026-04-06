@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Exam Hall App</title>
+</head>
+
+<body>
+
+<h2>Exam Hall Management</h2>
+
+<input id="subject" placeholder="Subject"><br><br>
+<input id="hall" placeholder="Hall"><br><br>
+<input id="time" placeholder="Time"><br><br>
+
+<button onclick="add()">Add</button>
+
+<h3>Schedule</h3>
+<div id="out"></div>
+
+<script>
+let data=[];
+
+function add(){
+let s=document.getElementById("subject").value;
+let h=document.getElementById("hall").value;
+let t=document.getElementById("time").value;
+
+if(!s || !h || !t){
+alert("Fill all fields!");
+return;
+}
+
+for(let e of data){
+if(e.h==h && e.t==t){
+alert("Hall clash ❌");
+return;
+}
+}
+
+data.push({s,h,t});
+show();
+}
+
+function show(){
+let o=document.getElementById("out");
+o.innerHTML="";
+data.forEach(e=>{
+o.innerHTML+=`<p>${e.s} - ${e.h} - ${e.t}</p>`;
+});
+}
+</script>
+
+</body>
+</html>
