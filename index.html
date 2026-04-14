@@ -1,31 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Login</title>
-</head>
 <body>
 
-<h2>Login</h2>
+<h2>Test</h2>
 
-<input type="text" id="name" placeholder="Enter name"><br><br>
-<input type="text" id="reg" placeholder="Enter reg no"><br><br>
-
-<button type="button" onclick="goToHome()">Login</button>
+<button onclick="test()">Click Me</button>
 
 <script>
-function goToHome() {
-    var name = document.getElementById("name").value;
-    var reg = document.getElementById("reg").value;
-
-    if(name === "" || reg === "") {
-        alert("Fill all fields");
-        return;
-    }
-
-    localStorage.setItem("username", name);
-    localStorage.setItem("regno", reg);
-
-    window.location.href = "home.html";
+function test() {
+    alert("Working");
 }
 </script>
 
