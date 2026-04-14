@@ -2,22 +2,24 @@
 <html>
 <head>
     <title>Home</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1 id="welcome"></h1>
-    <h3 id="regno"></h3>
+<h1 id="welcome"></h1>
 
-    <a href="schedule.html">View Exam Details</a>
+<br>
 
-    <script>
-        var name = localStorage.getItem("username");
-        var reg = localStorage.getItem("regno");
+<a href="schedule.html">View Exam Details</a>
 
-        document.getElementById("welcome").innerText = "Welcome " + name;
-        document.getElementById("regno").innerText = "Reg No: " + reg;
-    </script>
+<script>
+var name = localStorage.getItem("username");
+
+if(name){
+    document.getElementById("welcome").innerText = "Welcome " + name;
+}else{
+    document.getElementById("welcome").innerText = "Welcome Guest";
+}
+</script>
 
 </body>
 </html>
