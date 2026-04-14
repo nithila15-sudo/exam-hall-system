@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="style.css">
-<title>Student Details</title>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Exam Details</h2>
+    <h1 id="welcome"></h1>
+    <h3 id="regno"></h3>
 
-<p id="name"></p>
-<p id="subject"></p>
-<p id="hall"></p>
-<p id="time"></p>
+    <a href="schedule.html">View Exam Details</a>
 
-<button onclick="logout()">Logout</button>
+    <script>
+        var name = localStorage.getItem("username");
+        var reg = localStorage.getItem("regno");
 
-<script>
-var data = JSON.parse(localStorage.getItem("student"));
-
-document.getElementById("name").innerHTML = "Name: " + data.name;
-document.getElementById("subject").innerHTML = "Subject: " + data.subject;
-document.getElementById("hall").innerHTML = "Hall: " + data.hall;
-document.getElementById("time").innerHTML = "Time: " + data.time;
-
-function logout(){
-    localStorage.clear();
-    window.location = "index.html";
-}
-</script>
+        document.getElementById("welcome").innerText = "Welcome " + name;
+        document.getElementById("regno").innerText = "Reg No: " + reg;
+    </script>
 
 </body>
 </html>
