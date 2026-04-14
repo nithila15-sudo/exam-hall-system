@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
-<title>Student Login</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<h2>Exam Hall Login</h2>
+    <h2>Student Login</h2>
 
-<input id="user" placeholder="Enter Register Number"><br><br>
-<input id="pass" type="password" placeholder="Password"><br><br>
+    <input type="text" id="name" placeholder="Enter your name"><br><br>
+    <input type="text" id="reg" placeholder="Enter Register Number"><br><br>
 
-<button onclick="login()">Login</button>
+    <button onclick="goToHome()">Login</button>
 
-<script>
-var students = {
-    "101": {name:"NITHILA", hall:"A1", time:"10AM", subject:"Maths"},
-    "102": {name:"SWETHA", hall:"B2", time:"1PM", subject:"Physics"},
-    "103": {name:"ANU", hall:"C3", time:"2PM", subject:"Chemistry"}
-};
+    <script>
+        function goToHome() {
+            var name = document.getElementById("name").value;
+            var reg = document.getElementById("reg").value;
 
-function login(){
-    var reg = document.getElementById("user").value;
+            if(name === "" || reg === "") {
+                alert("Fill all details");
+                return;
+            }
 
-    if(students[reg]){
-        localStorage.setItem("student", JSON.stringify(students[reg]));
-        window.location = "home.html";
-    } else {
-        alert("Invalid Register Number ❌");
-    }
-}
-</script>
+            localStorage.setItem("username", name);
+            localStorage.setItem("regno", reg);
+
+            window.location.href = "home.html";
+        }
+    </script>
 
 </body>
 </html>
