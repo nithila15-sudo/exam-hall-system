@@ -1,40 +1,53 @@
 <!DOCTYPE html>
 <html>
-<link rel="stylesheet" href="style.css">
-    <title>Exam Schedule</title>
+<head>
+    <title>Schedule</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h2>Exam Schedule</h2>
+    <h2>Exam Details</h2>
 
-<table border="1">
-    <tr>
-        <th>Subject</th>
-        <th>Hall</th>
-        <th>Time</th>
-    </tr>
+    <table border="1">
+        <tr>
+            <th>Subject</th>
+            <th>Hall</th>
+            <th>Time</th>
+        </tr>
+        <tr id="data"></tr>
+    </table>
 
-    <tr>
-        <td>Maths</td>
-        <td>A1</td>
-        <td>10 AM</td>
-    </tr>
+    <script>
+        var reg = localStorage.getItem("regno");
 
-    <tr>
-        <td>Physics</td>
-        <td>B2</td>
-        <td>1 PM</td>
-    </tr>
+        // Last digit eduthu logic apply pannrom
+        var lastDigit = reg.slice(-1);
 
-    <tr>
-        <td>Chemistry</td>
-        <td>C3</td>
-        <td>2 PM</td>
-    </tr>
+        var subject = "";
+        var hall = "";
+        var time = "";
 
-</table>
+        if(lastDigit == "1" || lastDigit == "2" || lastDigit == "3") {
+            subject = "Maths";
+            hall = "A101";
+            time = "10:00 AM";
+        }
+        else if(lastDigit == "4" || lastDigit == "5" || lastDigit == "6") {
+            subject = "Physics";
+            hall = "B202";
+            time = "1:00 PM";
+        }
+        else {
+            subject = "Chemistry";
+            hall = "C303";
+            time = "3:00 PM";
+        }
+
+        document.getElementById("data").innerHTML =
+            "<td>" + subject + "</td>" +
+            "<td>" + hall + "</td>" +
+            "<td>" + time + "</td>";
+    </script>
 
 </body>
 </html>
