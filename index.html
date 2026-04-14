@@ -1,12 +1,35 @@
-<script>
-function login(){
-    var username = document.getElementById("user").value;
-    var password = document.getElementById("pass").value;
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Login</title>
+</head>
+<body>
 
-    if(username == "admin" && password == "1234"){
+<h2>Exam Hall Login</h2>
+
+<input id="user" placeholder="Enter Register Number"><br><br>
+<input id="pass" type="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+var students = {
+    "101": {name:"Ravi", hall:"A1", time:"10AM", subject:"Maths"},
+    "102": {name:"Anu", hall:"B2", time:"1PM", subject:"Physics"},
+    "103": {name:"Kumar", hall:"C3", time:"2PM", subject:"Chemistry"}
+};
+
+function login(){
+    var reg = document.getElementById("user").value;
+
+    if(students[reg]){
+        localStorage.setItem("student", JSON.stringify(students[reg]));
         window.location = "home.html";
     } else {
-        alert("Wrong login ❌");
+        alert("Invalid Register Number ❌");
     }
 }
 </script>
+
+</body>
+</html>
