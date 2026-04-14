@@ -2,32 +2,33 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Login</h2>
+    <h2>Student Login</h2>
 
-<input type="text" id="name" placeholder="Enter name"><br><br>
-<input type="text" id="reg" placeholder="Enter reg no"><br><br>
+    <input type="text" id="name" placeholder="Enter your name"><br><br>
+    <input type="text" id="reg" placeholder="Enter Register Number"><br><br>
 
-<button type="button" onclick="goToHome()">Login</button>
+    <button onclick="goToHome()">Login</button>
 
-<script>
-function goToHome() {
-    var name = document.getElementById("name").value;
-    var reg = document.getElementById("reg").value;
+    <script>
+        function goToHome() {
+            var name = document.getElementById("name").value;
+            var reg = document.getElementById("reg").value;
 
-    if(name === "" || reg === "") {
-        alert("Fill all fields");
-        return;
-    }
+            if(name === "" || reg === "") {
+                alert("Fill all details");
+                return;
+            }
 
-    localStorage.setItem("username", name);
-    localStorage.setItem("regno", reg);
+            localStorage.setItem("username", name);
+            localStorage.setItem("regno", reg);
 
-    window.location.href = "home.html";
-}
-</script>
+            window.location.href = "home.html";
+        }
+    </script>
 
 </body>
 </html>
