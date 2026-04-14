@@ -1,38 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Schedule</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<script>
+    var reg = localStorage.getItem("regno");
 
-    <h2>Exam Details</h2>
+    if(!reg) {
+        document.getElementById("data").innerHTML =
+            "<td colspan='3'>No Register Number Found</td>";
+    } else {
 
-    <table border="1">
-        <tr>
-            <th>Subject</th>
-            <th>Hall</th>
-            <th>Time</th>
-        </tr>
-        <tr id="data"></tr>
-    </table>
-
-    <script>
-        var reg = localStorage.getItem("regno");
-
-        // Last digit eduthu logic apply pannrom
-        var lastDigit = reg.slice(-1);
+        var lastDigit = reg.toString().slice(-1);
 
         var subject = "";
         var hall = "";
         var time = "";
 
-        if(lastDigit == "1" || lastDigit == "2" || lastDigit == "3") {
+        if(lastDigit === "1" || lastDigit === "2" || lastDigit === "3") {
             subject = "Maths";
             hall = "A101";
             time = "10:00 AM";
         }
-        else if(lastDigit == "4" || lastDigit == "5" || lastDigit == "6") {
+        else if(lastDigit === "4" || lastDigit === "5" || lastDigit === "6") {
             subject = "Physics";
             hall = "B202";
             time = "1:00 PM";
@@ -47,7 +32,5 @@
             "<td>" + subject + "</td>" +
             "<td>" + hall + "</td>" +
             "<td>" + time + "</td>";
-    </script>
-
-</body>
-</html>
+    }
+</script>
