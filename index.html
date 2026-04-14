@@ -19,13 +19,14 @@
             var reg = document.getElementById("reg").value;
 
             if(name === "" || reg === "") {
-                alert("Fill all details");
+                alert("Please fill all details");
                 return;
             }
 
             localStorage.setItem("username", name);
             localStorage.setItem("regno", reg);
 
+            // redirect
             window.location.href = "home.html";
         }
     </script>
