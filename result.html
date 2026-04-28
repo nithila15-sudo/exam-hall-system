@@ -1,1 +1,52 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall Result | Ramco</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:linear-gradient(135deg,#0b2b40,#1a4a6f);min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif;padding:20px}
+        .card{max-width:500px;background:white;border-radius:28px;padding:2rem;box-shadow:0 20px 40px rgba(0,0,0,0.2);text-align:center}
+        .success-icon{font-size:4rem;margin-bottom:1rem}
+        h2{color:#0b2b40;margin-bottom:0.5rem}
+        .details{background:#f0f5fa;border-radius:20px;padding:1.5rem;margin:1.5rem 0;text-align:left}
+        .detail-row{margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px dashed #ccc}
+        .label{font-weight:bold;color:#0b2b40;display:inline-block;width:100px}
+        .value{color:#2c7da0;font-weight:bold}
+        .badge{background:#ff9142;display:inline-block;padding:8px 20px;border-radius:40px;font-weight:bold}
+        .btn{background:#0b2b40;color:white;border:none;padding:10px 25px;border-radius:40px;cursor:pointer;font-weight:bold;margin:0.5rem}
+        .btn-back{background:#4a627a}
+        small{display:block;margin-top:1rem;color:#4a627a}
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="success-icon">✅🎓</div>
+    <h2>Hall Allocation Details</h2>
+    <p>Internal Assessment Test – II | 17 April 2026</p>
+    <div class="details" id="resultDetails">
+        <div class="detail-row"><span class="label">📌 Roll Number:</span><span class="value" id="rollDisplay">-</span></div>
+        <div class="detail-row"><span class="label">🏛️ Hall No:</span><span class="value" id="hallDisplay">-</span></div>
+        <div class="detail-row"><span class="label">📚 Branch:</span><span class="value" id="branchDisplay">-</span></div>
+        <div class="detail-row"><span class="label">⏰ Session:</span><span class="value">AN Session (2:00 PM - 4:00 PM)</span></div>
+        <div style="text-align:center"><span class="badge">⭐ Report 30 mins before exam</span></div>
+    </div>
+    <button class="btn" onclick="location.href='home.html'">🔍 Search Another</button>
+    <button class="btn btn-back" onclick="location.href='index.html'">🏠 Back to Home</button>
+    <small>Please carry your ID card | Ramco Institute of Technology</small>
+</div>
+<script>
+    const roll = sessionStorage.getItem('rollNumber');
+    const hall = sessionStorage.getItem('hall');
+    const branch = sessionStorage.getItem('branch');
+    if(roll && hall && branch){
+        document.getElementById('rollDisplay').innerText = roll;
+        document.getElementById('hallDisplay').innerText = hall;
+        document.getElementById('branchDisplay').innerText = branch;
+    } else {
+        document.getElementById('resultDetails').innerHTML = '<div style="color:#b33">❌ No data found. Please search from home page.</div>';
+    }
+</script>
+</body>
+</html>
