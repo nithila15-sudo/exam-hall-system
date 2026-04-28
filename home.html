@@ -1,1 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Hall | Ramco</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#eef2f7;font-family:'Segoe UI',sans-serif;padding:20px}
+        .card{max-width:550px;margin:auto;background:white;border-radius:28px;padding:2rem;box-shadow:0 10px 25px rgba(0,0,0,0.1);text-align:center}
+        h2{color:#0b2b40;margin-bottom:0.5rem}
+        .sub{color:#4a627a;margin-bottom:1.5rem;font-size:0.9rem}
+        .input-group{display:flex;gap:12px;margin:1.5rem 0;flex-wrap:wrap}
+        input{flex:3;padding:14px;border:2px solid #ccc;border-radius:60px;font-size:1rem}
+        button{flex:1;background:#0b2b40;color:white;border:none;border-radius:60px;font-weight:bold;cursor:pointer}
+        button:hover{background:#1f5e7a}
+        .nav-link{margin-top:1.5rem}
+        .nav-link a{color:#2c7da0;text-decoration:none}
+        small{display:block;margin-top:1rem;color:#4a627a}
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>🔍 Exam Hall Finder</h2>
+    <div class="sub">Internal Assessment Test – II | 17 April 2026 (AN)</div>
+    <div class="input-group">
+        <input type="text" id="rollInput" placeholder="Enter 12-digit Roll Number (eg: 953625104005)">
+        <button id="searchBtn">Search</button>
+    </div>
+    <div class="nav-link"><a href="index.html">← Back to Home</a></div>
+    <small>✅ 1000+ students supported</small>
+</div>
 
+<script>
+// Complete hall data - All roll numbers from your images
+const hallData = {
+    // A1L03 - CSE B
+    "953625104005": { hall: "A1L03", branch: "CSE - B" },
+    "953625104007": { hall: "A1L03", branch: "CSE - B" },
+    "953625104008": { hall: "A1L03", branch: "CSE - B" },
+    "953625104009": { hall: "A1L03", branch: "CSE - B" },
+    "953625104011": { hall: "A1L03", branch: "CSE - B" },
+    "953625104013": { hall: "A1L03", branch: "CSE - B" },
+    "953625104015": { hall: "A1L03", branch: "CSE - B" },
+    "953625104019": { hall: "A1L03", branch: "CSE - B" },
+    "953625104021": { hall: "A1L03", branch: "CSE - B" },
+    "953625104022": { hall: "A1L03", branch: "CSE - B" },
+    "953625104026": { hall: "A1L03", branch: "CSE - B" },
+    "953625104030": { hall: "A1L03", branch: "CSE - B" },
+    "953625104032": { hall: "A1L03", branch: "CSE - B" },
+    "953625104034": { hall: "A1L03", branch: "CSE - B" },
+    "953625104035": { hall: "A1L03", branch: "CSE - B" },
+    "953625104040": { hall: "A1L03", branch: "CSE - B" },
+    // A1L03 - CSBS
+    "953625244001": { hall: "A1L03", branch: "CSBS" },
+    "953625244002": { hall: "A1L03", branch: "CSBS" },
+    "953625244003": { hall: "A1L03", branch: "CSBS" },
+    "953625244004": { hall: "A1L03", branch: "CSBS" },
+    "953625244005": { hall: "A1L03", branch: "CSBS" },
+    "953625244007": { hall: "A1L03", branch: "CSBS" },
+    "953625244008": { hall: "A1L03", branch: "CSBS" },
+    "953625244009": { hall: "A1L03", branch: "CSBS" },
+    "953625244011": { hall: "A1L03", branch: "CSBS" },
+    "953625244012": { hall: "A1L03", branch: "CSBS" },
+    "953625244013": { hall: "A1L03", branch: "CSBS" },
+    "953625244014": { hall: "A1L03", branch: "CSBS" },
+    "953625244015": { hall: "A1L03", branch: "CSBS" },
+    "953625244016": { hall: "A1L03", branch: "CSBS" },
+    "953625244017": { hall: "A1L03", branch: "CSBS" },
+    "953625244018": { hall: "A1L03", branch: "CSBS" },
+    // C2R04 - CSE A (including 108)
+    "953625104091": { hall: "C2R04", branch: "CSE - A" },
+    "953625104095": { hall: "C2R04", branch: "CSE - A" },
+    "953625104097": { hall: "C2R04", branch: "CSE - A" },
+    "953625104098": { hall: "C2R04", branch: "CSE - A" },
+    "953625104099": { hall: "C2R04", branch: "CSE - A" },
+    "953625104100": { hall: "C2R04", branch: "CSE - A" },
+    "953625104105": { hall: "C2R04", branch: "CSE - A" },
+    "953625104108": { hall: "C2R04", branch: "CSE - A" },
+    "953625104109": { hall: "C2R04", branch: "CSE - A" },
+    "953625104114": { hall: "C2R04", branch: "CSE - A" },
+    "953625104116": { hall: "C2R04", branch: "CSE - A" },
+    "953625104117": { hall: "C2R04", branch: "CSE - A" },
+    "953625104120": { hall: "C2R04", branch: "CSE - A" },
+    "953625104123": { hall: "C2R04", branch: "CSE - A" },
+    "953625104134": { hall: "C2R04", branch: "CSE - A" },
+    "953625104140": { hall: "C2R04", branch: "CSE - A" },
+    // B3R05 - CSE A
+    "953625104001": { hall: "B3R05", branch: "CSE - A" },
+    "953625104002": { hall: "B3R05", branch: "CSE - A" },
+    "953625104003": { hall: "B3R05", branch: "CSE - A" },
+    "953625104010": { hall: "B3R05", branch: "CSE - A" },
+    "953625104014": { hall: "B3R05", branch: "CSE - A" },
+    "953625104017": { hall: "B3R05", branch: "CSE - A" },
+    "953625104020": { hall: "B3R05", branch: "CSE - A" },
+    "953625104025": { hall: "B3R05", branch: "CSE - A" },
+    "953625104028": { hall: "B3R05", branch: "CSE - A" },
+    "953625104031": { hall: "B3R05", branch: "CSE - A" },
+    "953625104033": { hall: "B3R05", branch: "CSE - A" },
+    "953625104036": { hall: "B3R05", branch: "CSE - A" },
+    "953625104037": { hall: "B3R05", branch: "CSE - A" },
+    "953625104038": { hall: "B3R05", branch: "CSE - A" }
+};
+
+// Search function
+document.getElementById('searchBtn').onclick = () => {
+    let roll = document.getElementById('rollInput').value.trim();
+    if (!roll) {
+        alert("Please enter roll number");
+        return;
+    }
+    let data = hallData[roll];
+    if (data) {
+        // Store in localStorage (more reliable than sessionStorage)
+        localStorage.setItem('rollNumber', roll);
+        localStorage.setItem('hall', data.hall);
+        localStorage.setItem('branch', data.branch);
+        window.location.href = 'result.html';
+    } else {
+        alert("❌ Roll number " + roll + " not found!\n\nPlease check your roll number.\nExample: 953625104108");
+    }
+};
+
+document.getElementById('rollInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('searchBtn').click();
+});
+
+// Show total count
+document.querySelector('small').innerHTML = `✅ ${Object.keys(hallData).length} students loaded | IAT-II, 17.04.2026`;
+</script>
+</body>
+</html>
