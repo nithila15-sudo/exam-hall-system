@@ -1,28 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Search</title>
+<title>Exam Hall Search</title>
 </head>
 
-<body>
+<body style="text-align:center;">
 
 <h2>Enter Register Number</h2>
 
-<input type="text" id="regno">
-<button onclick="findHall()">Search</button>
+<input type="text" id="reg">
+<button onclick="find()">Search</button>
 
-<p id="result"></p>
+<h3 id="out"></h3>
 
 <script>
-function findHall(){
-let reg = document.getElementById("regno").value;
 
-if(reg >= 953625104005 && reg <= 953625104040){
-document.getElementById("result").innerHTML = "Hall: A1L03";
-}else{
-document.getElementById("result").innerHTML = "Not Found";
+// 🔥 RANGE FUNCTION
+function inRange(num, start, end){
+return num >= start && num <= end;
 }
+
+function find(){
+
+let r = document.getElementById("reg").value;
+let num = Number(r);
+
+// A1L03
+if(
+inRange(num,953625104007,953625104009) ||
+inRange(num,953625104011,953625104040)
+){
+out.innerHTML = "Hall: A1L03";
 }
+
+// A1L04
+else if(
+inRange(num,953625104004,953625104006) ||
+inRange(num,953625104041,953625104055)
+){
+out.innerHTML = "Hall: A1L04";
+}
+
+// A2L01
+else if(
+inRange(num,953625106064,953625106080)
+){
+out.innerHTML = "Hall: A2L01";
+}
+
+// A2L02
+else if(
+inRange(num,953625205001,953625205016)
+){
+out.innerHTML = "Hall: A2L02";
+}
+
+else{
+out.innerHTML = "Not Found ❌";
+}
+
+}
+
 </script>
 
 </body>
