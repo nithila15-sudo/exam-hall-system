@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Search Hall</title>
+<title>Search</title>
 </head>
+
 <body>
 
 <h2>Enter Register Number</h2>
 
-<input type="text" id="regno" placeholder="Enter Register Number">
-
+<input type="text" id="regno">
 <button onclick="findHall()">Search</button>
 
 <p id="result"></p>
 
 <script>
-function findHall() {
-    let reg = document.getElementById("regno").value;
+function findHall(){
+let reg = document.getElementById("regno").value;
 
-    // Example mapping (test)
-    if (reg >= 953625104005 && reg <= 953625104040) {
-        document.getElementById("result").innerHTML = "Hall: A1L03";
-    }
-    else if (reg >= 953625104041 && reg <= 953625104080) {
-        document.getElementById("result").innerHTML = "Hall: A1L04";
-    }
-    else {
-        document.getElementById("result").innerHTML = "Not Found";
-    }
+if(reg >= 953625104005 && reg <= 953625104040){
+document.getElementById("result").innerHTML = "Hall: A1L03";
+}else{
+document.getElementById("result").innerHTML = "Not Found";
+}
 }
 </script>
 
