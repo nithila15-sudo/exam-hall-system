@@ -1,33 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Exam Hall</title>
 </head>
 <body>
 
-<h2>Student Login</h2>
+<h1>Exam Hall Management</h1>
 
-<input type="text" id="name" placeholder="Enter your name"><br><br>
-<input type="text" id="reg" placeholder="Enter register number"><br><br>
-
-<button onclick="goToHome()">Login</button>
-
-<script>
-function goToHome() {
-    var name = document.getElementById("name").value;
-    var reg = document.getElementById("reg").value;
-
-    if(name === "" || reg === "") {
-        alert("Fill all details");
-        return;
-    }
-
-    localStorage.setItem("username", name);
-    localStorage.setItem("regno", reg);
-
-    window.location.href = "home.html";
-}
-</script>
+<a href="intro.html">Start</a>
 
 </body>
 </html>
