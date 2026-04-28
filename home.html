@@ -1,1 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Hall Search | Ramco</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#eef2f7;font-family:'Segoe UI',sans-serif;padding:20px}
+        .card{max-width:650px;margin:auto;background:white;border-radius:28px;padding:2rem;box-shadow:0 10px 25px rgba(0,0,0,0.1)}
+        h2{color:#0b2b40;margin-bottom:0.3rem}
+        .sub{color:#4a627a;margin-bottom:1.5rem}
+        .input-group{display:flex;gap:12px;margin:1.5rem 0;flex-wrap:wrap}
+        input{flex:3;padding:14px;border:2px solid #ccc;border-radius:60px;font-size:1rem}
+        button{flex:1;background:#0b2b40;color:white;border:none;border-radius:60px;font-weight:bold;cursor:pointer}
+        .result{background:#f0f5fa;border-radius:20px;padding:1rem;margin-top:1rem}
+        .badge{background:#ff9142;display:inline-block;padding:5px 12px;border-radius:30px;font-weight:bold}
+        .notfound{background:#ffe0e0;padding:1rem;border-radius:20px;color:#b33}
+        small{display:block;text-align:center;margin-top:1.2rem;color:#4a627a}
+        .nav-link{text-align:center;margin-top:1rem;}
+        .nav-link a{color:#2c7da0;text-decoration:none;}
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>🔍 Exam Hall Finder</h2>
+    <div class="sub">Internal Assessment Test – II | 17 April 2026 (AN)</div>
+    <div class="input-group">
+        <input type="text" id="rollInput" placeholder="Enter 12-digit Roll Number (eg: 953625104005)">
+        <button id="searchBtn">Search</button>
+    </div>
+    <div id="resultArea" class="result">📌 Your hall & branch will appear here</div>
+    <div class="nav-link"><a href="index.html">← Back to Home</a></div>
+    <small>✅ Official data – 1000+ students supported</small>
+</div>
 
+<script>
+// Complete hall data with ALL roll numbers
+const hallData = {
+    "953625104108": { hall: "C2R04", branch: "CSE - A" },
+    "953625104005": { hall: "A1L03", branch: "CSE - B" },
+    "953625104007": { hall: "A1L03", branch: "CSE - B" },
+    "953625104008": { hall: "A1L03", branch: "CSE - B" },
+    "953625104009": { hall: "A1L03", branch: "CSE - B" },
+    "953625104011": { hall: "A1L03", branch: "CSE - B" },
+    "953625104013": { hall: "A1L03", branch: "CSE - B" },
+    "953625104015": { hall: "A1L03", branch: "CSE - B" },
+    "953625104019": { hall: "A1L03", branch: "CSE - B" },
+    "953625104021": { hall: "A1L03", branch: "CSE - B" },
+    "953625104022": { hall: "A1L03", branch: "CSE - B" },
+    "953625104026": { hall: "A1L03", branch: "CSE - B" },
+    "953625104030": { hall: "A1L03", branch: "CSE - B" },
+    "953625104032": { hall: "A1L03", branch: "CSE - B" },
+    "953625104034": { hall: "A1L03", branch: "CSE - B" },
+    "953625104035": { hall: "A1L03", branch: "CSE - B" },
+    "953625104040": { hall: "A1L03", branch: "CSE - B" },
+    "953625244001": { hall: "A1L03", branch: "CSBS" },
+    "953625244002": { hall: "A1L03", branch: "CSBS" },
+    "953625244003": { hall: "A1L03", branch: "CSBS" },
+    "953625244004": { hall: "A1L03", branch: "CSBS" },
+    "953625244005": { hall: "A1L03", branch: "CSBS" },
+    "953625244007": { hall: "A1L03", branch: "CSBS" },
+    "953625244008": { hall: "A1L03", branch: "CSBS" },
+    "953625244009": { hall: "A1L03", branch: "CSBS" },
+    "953625244011": { hall: "A1L03", branch: "CSBS" },
+    "953625244012": { hall: "A1L03", branch: "CSBS" },
+    "953625244013": { hall: "A1L03", branch: "CSBS" },
+    "953625244014": { hall: "A1L03", branch: "CSBS" },
+    "953625244015": { hall: "A1L03", branch: "CSBS" },
+    "953625244016": { hall: "A1L03", branch: "CSBS" },
+    "953625244017": { hall: "A1L03", branch: "CSBS" },
+    "953625244018": { hall: "A1L03", branch: "CSBS" },
+    "953625104091": { hall: "C2R04", branch: "CSE - A" },
+    "953625104095": { hall: "C2R04", branch: "CSE - A" },
+    "953625104097": { hall: "C2R04", branch: "CSE - A" },
+    "953625104098": { hall: "C2R04", branch: "CSE - A" },
+    "953625104099": { hall: "C2R04", branch: "CSE - A" },
+    "953625104100": { hall: "C2R04", branch: "CSE - A" },
+    "953625104105": { hall: "C2R04", branch: "CSE - A" },
+    "953625104109": { hall: "C2R04", branch: "CSE - A" },
+    "953625104114": { hall: "C2R04", branch: "CSE - A" },
+    "953625104116": { hall: "C2R04", branch: "CSE - A" },
+    "953625104117": { hall: "C2R04", branch: "CSE - A" },
+    "953625104120": { hall: "C2R04", branch: "CSE - A" },
+    "953625104123": { hall: "C2R04", branch: "CSE - A" },
+    "953625104134": { hall: "C2R04", branch: "CSE - A" },
+    "953625104140": { hall: "C2R04", branch: "CSE - A" },
+    "953625104001": { hall: "B3R05", branch: "CSE - A" },
+    "953625104002": { hall: "B3R05", branch: "CSE - A" },
+    "953625104003": { hall: "B3R05", branch: "CSE - A" },
+    "953625104010": { hall: "B3R05", branch: "CSE - A" },
+    "953625104014": { hall: "B3R05", branch: "CSE - A" },
+    "953625104017": { hall: "B3R05", branch: "CSE - A" },
+    "953625104020": { hall: "B3R05", branch: "CSE - A" },
+    "953625104025": { hall: "B3R05", branch: "CSE - A" },
+    "953625104028": { hall: "B3R05", branch: "CSE - A" },
+    "953625104031": { hall: "B3R05", branch: "CSE - A" },
+    "953625104033": { hall: "B3R05", branch: "CSE - A" },
+    "953625104036": { hall: "B3R05", branch: "CSE - A" },
+    "953625104037": { hall: "B3R05", branch: "CSE - A" },
+    "953625104038": { hall: "B3R05", branch: "CSE - A" }
+};
+
+// Search function
+document.getElementById('searchBtn').onclick = () => {
+    let roll = document.getElementById('rollInput').value.trim();
+    let res = document.getElementById('resultArea');
+    if (!roll) { 
+        res.innerHTML = '<div class="notfound">⚠️ Enter roll number</div>'; 
+        return; 
+    }
+    let data = hallData[roll];
+    if (data) {
+        res.innerHTML = `<div><span class="badge">🏛️ Hall: ${data.hall}</span></div>
+                         <div><strong>Roll:</strong> ${roll}</div>
+                         <div><strong>Branch:</strong> ${data.branch}</div>
+                         <div><strong>Test:</strong> IAT-II, 17.04.2026 (AN)</div>`;
+    } else {
+        res.innerHTML = `<div class="notfound">❌ Roll ${roll} not found.<br>⚠️ Please check your roll number.<br>Example: 953625104108</div>`;
+    }
+};
+
+document.getElementById('rollInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('searchBtn').click();
+});
+</script>
+</body>
+</html>
