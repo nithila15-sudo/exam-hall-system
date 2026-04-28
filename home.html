@@ -1,25 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Home</title>
-</head>
-<body>
-
-<h1 id="welcome"></h1>
-
-<br>
-
-<a href="schedule.html">View Exam Details</a>
+<button onclick="search()">Search Hall</button>
+<button onclick="go()">Schedule</button>
 
 <script>
-var name = localStorage.getItem("username");
-
-if(name){
-    document.getElementById("welcome").innerText = "Welcome " + name;
-}else{
-    document.getElementById("welcome").innerText = "Welcome Guest";
+function search(){
+window.location="search.html";
+}
+function go(){
+window.location="schedule.html";
 }
 </script>
-
-</body>
-</html>
