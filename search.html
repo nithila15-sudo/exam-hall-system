@@ -1,42 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Hall</title>
+</head>
+<body>
+
+<h2>Enter Register Number</h2>
+
+<input type="text" id="regno" placeholder="Enter Register Number">
+
+<button onclick="findHall()">Search</button>
+
+<p id="result"></p>
+
 <script>
+function findHall() {
+    let reg = document.getElementById("regno").value;
 
-// 🔥 RANGE EXPAND FUNCTION
-function expand(base, start, end){
-let arr=[];
-for(let i=start;i<=end;i++){
-let num = i.toString().padStart(2,"0");
-arr.push(base + num);
+    // Example mapping (test)
+    if (reg >= 953625104005 && reg <= 953625104040) {
+        document.getElementById("result").innerHTML = "Hall: A1L03";
+    }
+    else if (reg >= 953625104041 && reg <= 953625104080) {
+        document.getElementById("result").innerHTML = "Hall: A1L04";
+    }
+    else {
+        document.getElementById("result").innerHTML = "Not Found";
+    }
 }
-return arr;
-}
-
-// 🔥 DATA STORAGE
-let data = {};
-
-// A1L03
-expand("9536251040",7,9).forEach(r=>data[r]={hall:"A1L03"});
-expand("9536251040",11,40).forEach(r=>data[r]={hall:"A1L03"});
-
-// A1L04
-expand("9536251040",4,6).forEach(r=>data[r]={hall:"A1L04"});
-expand("9536251040",12,55).forEach(r=>data[r]={hall:"A1L04"});
-
-// A2L01
-expand("9536251060",64,80).forEach(r=>data[r]={hall:"A2L01"});
-
-// A2L02
-expand("9536252050",1,16).forEach(r=>data[r]={hall:"A2L02"});
-
-// 🔍 SEARCH FUNCTION
-function find(){
-let r = document.getElementById("reg").value;
-
-if(data[r]){
-document.getElementById("out").innerHTML =
-"Hall: " + data[r].hall;
-}else{
-document.getElementById("out").innerHTML="Not Found ❌";
-}
-}
-
 </script>
+
+</body>
+</html>
