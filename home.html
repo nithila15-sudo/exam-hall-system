@@ -1,1 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Hall | Ramco</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#eef2f7;font-family:'Segoe UI',sans-serif;padding:20px}
+        .card{max-width:550px;margin:auto;background:white;border-radius:28px;padding:2rem;box-shadow:0 10px 25px rgba(0,0,0,0.1);text-align:center}
+        h2{color:#0b2b40;margin-bottom:0.5rem}
+        .sub{color:#4a627a;margin-bottom:1.5rem;font-size:0.9rem}
+        .input-group{display:flex;gap:12px;margin:1.5rem 0;flex-wrap:wrap}
+        input{flex:3;padding:14px;border:2px solid #ccc;border-radius:60px;font-size:1rem}
+        button{flex:1;background:#0b2b40;color:white;border:none;border-radius:60px;font-weight:bold;cursor:pointer}
+        button:hover{background:#1f5e7a}
+        .nav-link{margin-top:1.5rem}
+        .nav-link a{color:#2c7da0;text-decoration:none}
+        small{display:block;margin-top:1rem;color:#4a627a}
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>🔍 Exam Hall Finder</h2>
+    <div class="sub">Internal Assessment Test – II | 17 April 2026 (AN)</div>
+    <div class="input-group">
+        <input type="text" id="rollInput" placeholder="Enter 12-digit Roll Number (eg: 953625104005)">
+        <button id="searchBtn">Search</button>
+    </div>
+    <div class="nav-link"><a href="index.html">← Back to Home</a></div>
+    <small id="countDisplay">✅ Loading data...</small>
+</div>
 
+<script>
+// ============================================================
+// COMPLETE HALL DATA - ALL ROLL NUMBERS FROM OFFICIAL IMAGES
+// ============================================================
+
+const rollMap = new Map();
+
+// Helper function
+function addRolls(hall, branch, rollNumbers) {
+    rollNumbers.forEach(roll => rollMap.set(roll, { hall, branch }));
+}
+
+// ========== A1L03 (CSE - B) 16 students ==========
+addRolls("A1L03", "CSE - B", [
+    "953625104005","953625104007","953625104008","953625104009",
+    "953625104011","953625104013","953625104015","953625104019",
+    "953625104021","953625104022","953625104026","953625104030",
+    "953625104032","953625104034","953625104035","953625104040"
+]);
+
+// ========== A1L03 (CSBS) 16 students ==========
+addRolls("A1L03", "CSBS", [
+    "953625244001","953625244002","953625244003","953625244004",
+    "953625244005","953625244007","953625244008","953625244009",
+    "953625244011","953625244012","953625244013","953625244014",
+    "953625244015","953625244016","953625244017","953625244018"
+]);
+
+// ========== A1L04 (CSE - C) 16 students ==========
+addRolls("A1L04", "CSE - C", [
+    "953625104004","953625104006","953625104012","953625104016",
+    "953625104018","953625104023","953625104024","953625104027",
+    "953625104029","953625104039","953625104045","953625104046",
+    "953625104051","953625104053","953625104054","953625104055"
+]);
+
+// ========== A1L04 (ECE - A) 001-016 ==========
+let eceA1 = [];
+for(let i=1;i<=16;i++) eceA1.push("953625106"+i.toString().padStart(3,'0'));
+addRolls("A1L04", "ECE - A", eceA1);
+
+// ========== A2L01 (CSE - B) 064-067,069-080 ==========
+let cseB2 = [];
+for(let i=64;i<=67;i++) cseB2.push("953625106"+i.toString().padStart(3,'0'));
+for(let i=69;i<=80;i++) cseB2.push("953625106"+i.toString().padStart(3,'0'));
+addRolls("A2L01", "CSE - B", cseB2);
+
+// ========== A2L01 (AM) 001-016 ==========
+let am1 = [];
+for(let i=1;i<=16;i++) am1.push("953625148"+i.toString().padStart(3,'0'));
+addRolls("A2L01", "AM", am1);
+
+// ========== A2L02 (IT) 001-016 ==========
+let it1 = [];
+for(let i=1;i<=16;i++) it1.push("953625205"+i.toString().padStart(3,'0'));
+addRolls("A2L02", "IT", it1);
+
+// ========== A2L02 (AD - A) ==========
+addRolls("A2L02", "AD - A", [
+    "953625243001","953625243003","953625243005","953625243007",
+    "953625243008","953625243010","953625243012","953625243013",
+    "953625243014","953625243015","953625243018","953625243019",
+    "953625243023","953625243028","953625243031","953625243034"
+]);
+
+// ========== A2L03 (CSE - C) ==========
+addRolls("A2L03", "CSE - C", [
+    "953625105038","953625105061","953625105063","953625105068",
+    "953625105069","953625105071","953625105072","953625105074",
+    "953625105075","953625105080","953625105081","953625105082",
+    "953625105093","953625105094","953625105096"
+]);
+
+// ========== A2L03 (CSBS) 019-033 ==========
+let csbs1 = [];
+for(let i=19;i<=33;i++) csbs1.push("953625244"+i.toString().padStart(3,'0'));
+addRolls("A2L03", "CSBS", csbs1);
+
+// ========== A2L04 (CSE - B) ==========
+addRolls("A2L04", "CSE - B", [
+    "953625104042","953625104043","953625104048","953625104052",
+    "953625104057","953625104060","953625104062","953625104070",
+    "953625104073","953625104077","953625104078","953625104085",
+    "953625104087","953625104090","953625104092","953625104101"
+]);
+
+// ========== A2L04 (AD - B) ==========
+addRolls("A2L04", "AD - B", [
+    "953625243002","953625243004","953625243006","953625243009",
+    "953625243011","953625243016","953625243017","953625243020",
+    "953625243021","953625243022","953625243024","953625243025",
+    "953625243026","953625243027","953625243029","953625243030"
+]);
+
+// ========== A2R02 (Civil) 001-015 ==========
+let civil1 = [];
+for(let i=1;i<=15;i++) civil1.push("953625103"+i.toString().padStart(3,'0'));
+addRolls("A2R02", "Civil", civil1);
+
+// ========== A2R02 (CSE - B) ==========
+addRolls("A2R02", "CSE - B", [
+    "953625104138","953625104139","953625104145","953625104151",
+    "953625104158","953625104160","953625104164","953625104165",
+    "953625104166","953625104172","953625104176","953625104179",
+    "953625104182","953625104183","953625104185","953625104186","953625104187"
+]);
+
+// ========== A3L01 (EEE) 001-063 ==========
+let eee = [];
+for(let i=1;i<=63;i++) eee.push("953625105"+i.toString().padStart(3,'0'));
+addRolls("A3L01", "EEE", eee);
+
+// ========== C2L03 (MECH) 001-03,05-14 ==========
+addRolls("C2L03", "MECH", [
+    "953625114001","953625114002","953625114003","953625114005",
+    "953625114006","953625114007","953625114008","953625114009",
+    "953625114010","953625114011","953625114012","953625114013","953625114014"
+]);
+
+// ========== C2L03 (CSBS) 034-045 ==========
+let csbs2 = [];
+for(let i=34;i<=45;i++) csbs2.push("953625244"+i.toString().padStart(3,'0'));
+addRolls("C2L03", "CSBS", csbs2);
+
+// ========== B3R03 (ECE - B) 112-126 ==========
+let eceB1 = [];
+for(let i=112;i<=126;i++) eceB1.push("953625106"+i.toString().padStart(3,'0'));
+addRolls("B3R03", "ECE - B", eceB1);
+
+// ========== B3R03 (CSBS) 046-062 ==========
+let csbs3 = [];
+for(let i=46;i<=62;i++) csbs3.push("953625244"+i.toString().padStart(3,'0'));
+addRolls("B3R03", "CSBS", csbs3);
+
+// ========== B3R05 (CSE - A) ==========
+addRolls("B3R05", "CSE - A", [
+    "953625104001","953625104002","953625104003","953625104010",
+    "953625104014","953625104017","953625104020","953625104025",
+    "953625104028","953625104031","953625104033","953625104036",
+    "953625104037","953625104038"
+]);
+
+// ========== B3R05 (CSBE - B) ==========
+addRolls("B3R05", "CSBE - B", [
+    "953625104104","953625104106","953625104107","953625104112",
+    "953625104113","953625104115","953625104118","953625104121",
+    "953625104127","953625104128","953625104130","953625104133",
+    "953625104135","953625104136"
+]);
+
+// ========== B3L02 (CSE - A) ==========
+addRolls("B3L02", "CSE - A", [
+    "953625104041","953625104044","953625104047","953625104049",
+    "953625104050","953625104056","953625104059","953625104064",
+    "953625104065","953625104066","953625104067","953625104076",
+    "953625104079","953625104083","953625104084","953625104086","953625104088"
+]);
+
+// ========== B3L02 (AM) 010-031 ==========
+let am2 = [];
+for(let i=10;i<=31;i++) am2.push("953625148"+i.toString().padStart(3,'0'));
+addRolls("B3L02", "AM", am2);
+
+// ========== B3L05 (Civil) 016-030 ==========
+let civil2 = [];
+for(let i=16;i<=30;i++) civil2.push("953625103"+i.toString().padStart(3,'0'));
+addRolls("B3L05", "Civil", civil2);
+
+// ========== B3L05 (AM) 048-058,060-063 ==========
+let am3 = [];
+for(let i=48;i<=58;i++) am3.push("953625148"+i.toString().padStart(3,'0'));
+for(let i=60;i<=63;i++) am3.push("953625148"+i.toString().padStart(3,'0'));
+addRolls("B3L05", "AM", am3);
+
+// ========== C3R04 (CSE - A) ==========
+addRolls("C3R04", "CSE - A", [
+    "953625104143","953625104144","953625104147","953625104148",
+    "953625104150","953625104156","953625104162","953625104163",
+    "953625104167","953625104168","953625104170","953625104171",
+    "953625104173","953625104177","953625104178","953625104181"
+]);
+
+// ========== C3R04 (AD - B) ==========
+addRolls("C3R04", "AD - B", [
+    "953625243119","953625243120","953625243121","953625243123",
+    "953625243125","953625243126"
+]);
+
+// ========== C3L01 (AM) 032-038,040-047 ==========
+let am4 = [];
+for(let i=32;i<=38;i++) am4.push("953625148"+i.toString().padStart(3,'0'));
+for(let i=40;i<=47;i++) am4.push("953625148"+i.toString().padStart(3,'0'));
+addRolls("C3L01", "AM", am4);
+
+// ========== C3L01 (AD - A) ==========
+addRolls("C3L01", "AD - A", [
+    "953625243090","953625243092","953625243093","953625243094",
+    "953625243095","953625243098","953625243102","953625243104",
+    "953625243109","953625243111","953625243115","953625243116",
+    "953625243118","953625243122","953625243124"
+]);
+
+// ========== BOL01 (CSE - C) ==========
+addRolls("BOL01", "CSE - C", [
+    "953625104125","953625104126","953625104129","953625104131",
+    "953625104132","953625104137","953625104141","953625104142"
+]);
+
+// ========== BOL01 (AD - B) ==========
+addRolls("BOL01", "AD - B", [
+    "953625243053","953625243057","953625243062","953625243063",
+    "953625243064","953625243065","953625243067"
+]);
+
+// ========== BOL02 (ECE - B) 081-095 ==========
+let eceB2 = [];
+for(let i=81;i<=95;i++) eceB2.push("953625106"+i.toString().padStart(3,'0'));
+addRolls("BOL02", "ECE - B", eceB2);
+
+// ========== BOL02 (AD - B) ==========
+addRolls("BOL02", "AD - B", [
+    "953625243097","953625243099","953625243100","953625243101","953625243103"
+]);
+
+// ========== BOL03 (CSE - C) ==========
+addRolls("BOL03", "CSE - C", [
+    "953625104169","953625104174","953625104175","953625104180",
+    "953625104184","953625104188","953625104189"
+]);
+
+// ========== BOL03 (ECE - A) 017-032 ==========
+let eceA2 = [];
+for(let i=17;i<=32;i++) eceA2.push("953625106"+i.toString().padStart(3,'0'));
+addRolls("BOL03", "ECE - A", eceA2);
+
+// ========== B1L04 (ECE - A) 033-048 ==========
+let eceA3 = [];
+for(let i=33;i<=48;i++) eceA3.push("953625106"+i.toString().padStart(3,'0'));
+addRolls("B1L04", "ECE - A", eceA3);
+
+// ========== B1L04 (AD - A) ==========
+addRolls("B1L04", "AD - A", [
+    "953625243052","953625243054","953625243055","953625243056",
+    "953625243058","953625243059"
+]);
+
+// ========== B1L05 (IT) 017-032 ==========
+let it2 = [];
+for(let i=17;i<=32;i++) it2.push("953625205"+i.toString().padStart(3,'0'));
+addRolls("B1L05", "IT", it2);
+
+// ========== B1L05 (AD - A) ==========
+addRolls("B1L05", "AD - A", [
+    "953625243078","953625243081","953625243082","953625243083","953625243085"
+]);
+
+// ========== C2R04 (CSE - A) - FIXED including 108 ==========
+addRolls("C2R04", "CSE - A", [
+    "953625104091","953625104095","953625104097","953625104098",
+    "953625104099","953625104100","953625104105","953625104108",
+    "953625104109","953625104114","953625104116","953625104117",
+    "953625104120","953625104123","953625104134","953625104140"
+]);
+
+// ========== C2R04 (MECH) 015-030 ==========
+let mech1 = [];
+for(let i=15;i<=30;i++) mech1.push("953625114"+i.toString().padStart(3,'0'));
+addRolls("C2R04", "MECH", mech1);
+
+// ========== C2L01 (ECE - B) 096-111 ==========
+let eceB3 = [];
+for(let i=96;i<=111;i++) eceB3.push("953625106"+i.toString().padStart(3,'0'));
+addRolls("C2L01", "ECE - B", eceB3);
+
+// ========== C2L01 (IT) 033-048 ==========
+let it3 = [];
+for(let i=33;i<=48;i++) it3.push("953625205"+i.toString().padStart(3,'0'));
+addRolls("C2L01", "IT", it3);
+
+// ========== C2L02 (ECE - A) 049-063,068 ==========
+let eceA4 = [];
+for(let i=49;i<=63;i++) eceA4.push("953625106"+i.toString().padStart(3,'0'));
+eceA4.push("953625106068");
+addRolls("C2L02", "ECE - A", eceA4);
+
+// ========== C2L02 (IT) 049-063 ==========
+let it4 = [];
+for(let i=49;i<=63;i++) it4.push("953625205"+i.toString().padStart(3,'0'));
+addRolls("C2L02", "IT", it4);
+
+// ============================================================
+// SEARCH FUNCTION
+// ============================================================
+document.getElementById('searchBtn').onclick = () => {
+    let roll = document.getElementById('rollInput').value.trim();
+    if (!roll) {
+        alert("Please enter roll number");
+        return;
+    }
+    let data = rollMap.get(roll);
+    if (data) {
+        localStorage.setItem('rollNumber', roll);
+        localStorage.setItem('hall', data.hall);
+        localStorage.setItem('branch', data.branch);
+        window.location.href = 'result.html';
+    } else {
+        alert("❌ Roll number " + roll + " not found!\n\nPlease check your roll number.\nIt should start with 953625...");
+    }
+};
+
+document.getElementById('rollInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('searchBtn').click();
+});
+
+// Display total count
+document.getElementById('countDisplay').innerHTML = `✅ ${rollMap.size} students loaded | IAT-II, 17.04.2026`;
+console.log("Total roll numbers loaded:", rollMap.size);
+</script>
+</body>
+</html>
