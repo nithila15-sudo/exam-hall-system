@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login | CSE Hall</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:linear-gradient(135deg,#0b2b40,#1a4a6f);min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif;}
+.card{background:white;padding:2rem;border-radius:28px;width:350px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.2);}
+h2{color:#0b2b40;margin-bottom:0.5rem}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:40px;}
+button{width:100%;padding:12px;background:#0b2b40;color:white;border:none;border-radius:40px;cursor:pointer;font-weight:bold;}
+.error{color:red;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>👑 Exam Cell Login</h2>
+<p>CSE Hall Management System</p>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<div id="errorMsg" class="error"></div>
+</div>
+<script>
+function login() {
+    let u = document.getElementById('username').value;
+    let p = document.getElementById('password').value;
+    if(u === "examcell" && p === "ramco2026") {
+        localStorage.setItem('adminLoggedIn', 'true');
+        window.location.href = 'admin-dashboard.html';
+    } else {
+        document.getElementById('errorMsg').innerHTML = '❌ Invalid credentials. Use examcell / ramco2026';
+    }
+}
+</script>
+</body>
+</html>
