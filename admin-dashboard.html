@@ -1,1 +1,117 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | CSE Hall</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#eef2f7;font-family:'Segoe UI',sans-serif;padding:20px}
+.container{max-width:1200px;margin:auto}
+.header{background:#0b2b40;color:white;padding:1rem;border-radius:20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.btn{background:#ff9142;color:white;border:none;padding:10px 20px;border-radius:40px;cursor:pointer;font-weight:bold}
+.btn-add{background:#2ecc71}
+.btn-excel{background:#27ae60}
+.btn-import{background:#3498db}
+.btn-logout{background:#e74c3c}
+table{width:100%;background:white;border-radius:20px;overflow:auto;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #ddd}
+th{background:#0b2b40;color:white}
+.edit-btn{background:#3498db;color:white;border:none;padding:5px 12px;border-radius:20px;cursor:pointer}
+.delete-btn{background:#e74c3c;color:white;border:none;padding:5px 12px;border-radius:20px;cursor:pointer}
+.search-box{margin-bottom:20px;display:flex;gap:10px;flex-wrap:wrap}
+.search-box input{flex:1;padding:10px;border-radius:40px;border:1px solid #ccc;min-width:200px}
+.stats{background:white;padding:15px;border-radius:20px;margin-bottom:20px;text-align:center}
+.file-input{display:none}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h2>👑 Admin Dashboard – CSE Hall Management</h2>
+<div>
+<button class="btn btn-add" onclick="location.href='admin-add.html'">➕ Add Student</button>
+<button class="btn btn-excel" onclick="exportToExcel()">📊 Export to Excel</button>
+<button class="btn btn-import" onclick="document.getElementById('excelInput').click()">📂 Import Excel</button>
+<button class="btn btn-logout" onclick="logout()">🚪 Logout</button>
+</div>
+</div>
+<input type="file" id="excelInput" accept=".xlsx, .xls" class="file-input" onchange="handleExcelUpload(event)">
+<div class="stats" id="stats">Loading...</div>
+<div class="search-box">
+<input type="text" id="searchInput" placeholder="🔍 Search by Roll Number or Hall or Branch...">
+<button class="btn" onclick="searchData()">Search</button>
+<button class="btn" onclick="loadAllData()">Show All</button>
+</div>
+<div style="overflow-x:auto">
+<table id="dataTable">
+<thead><tr><th>Roll Number</th><th>Hall</th><th>Branch</th><th>Name</th><th>Actions</th></tr></thead>
+<tbody id="tableBody"></tbody>
+\dash
+</div>
+</div>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script>
+let studentData = JSON.parse(localStorage.getItem('studentData')) || [];
+function saveToLocal() { localStorage.setItem('studentData', JSON.stringify(studentData)); updateStats(); }
+function updateStats() { document.getElementById('stats').innerHTML = `📊 Total Students: ${studentData.length} | 🏛️ Halls: ${new Set(studentData.map(s=>s.hall)).size} | 📚 Branches: ${new Set(studentData.map(s=>s.branch)).size}`; }
+function displayData(data) {
+    if(data.length===0){ document.getElementById('tableBody').innerHTML='<tr><td colspan="5">No data found</td></tr>'; return; }
+    let html='';
+    data.forEach((student,idx)=>{
+        let orig=studentData.findIndex(s=>s.roll===student.roll);
+        html+=`<tr><td>${student.roll}</td><td>${student.hall}</td><td>${student.branch}</td><td>${student.name||''}</td><td><button class="edit-btn" onclick="editStudent(${orig})">✏️ Edit</button> <button class="delete-btn" onclick="deleteStudent(${orig})">🗑️ Delete</button></td></tr>`;
+    });
+    document.getElementById('tableBody').innerHTML=html;
+}
+function loadAllData(){ displayData(studentData); document.getElementById('searchInput').value=''; updateStats(); }
+function searchData(){ let s=document.getElementById('searchInput').value.toLowerCase(); let f=studentData.filter(sd=>sd.roll.toLowerCase().includes(s)||sd.hall.toLowerCase().includes(s)||sd.branch.toLowerCase().includes(s)||(sd.name&&sd.name.toLowerCase().includes(s))); displayData(f); }
+function deleteStudent(i){ if(confirm('Delete this student?')){ studentData.splice(i,1); saveToLocal(); loadAllData(); } }
+function editStudent(i){ localStorage.setItem('editIndex',i); window.location.href='admin-edit.html'; }
+function logout(){ localStorage.removeItem('adminLoggedIn'); window.location.href='admin-login.html'; }
+function exportToExcel(){
+    let excel=[["Sl.No","Roll Number","Hall","Branch","Name"]];
+    studentData.forEach((s,i)=>{ excel.push([i+1,s.roll,s.hall,s.branch,s.name||""]); });
+    let ws=XLSX.utils.aoa_to_sheet(excel); let wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,"CSE_Students"); XLSX.writeFile(wb,`CSE_Students_${new Date().toISOString().slice(0,19).replace(/:/g,'-')}.xlsx`);
+}
+function handleExcelUpload(e){
+    let file=e.target.files[0]; if(!file) return;
+    let reader=new FileReader();
+    reader.onload=function(ev){
+        let data=new Uint8Array(ev.target.result);
+        let workbook=XLSX.read(data,{type:'array'});
+        let sheet=workbook.Sheets[workbook.SheetNames[0]];
+        let rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:""});
+        if(rows.length<2){ alert("No data rows"); return; }
+        let headers=rows[0];
+        let rollCol=-1,hallCol=-1,branchCol=-1,nameCol=-1;
+        for(let i=0;i<headers.length;i++){
+            let h=String(headers[i]).toLowerCase();
+            // Accept many common roll number column names
+            if(h.includes("roll") || h.includes("reg") || h==="id" || h==="s.no" || h==="register number") rollCol=i;
+            if(h.includes("hall")) hallCol=i;
+            if(h.includes("branch")) branchCol=i;
+            if(h.includes("name")) nameCol=i;
+        }
+        if(rollCol===-1){ alert("Roll Number column not found. Please ensure your Excel has a column named 'Roll Number' or 'Reg NO' or 'ID'."); return; }
+        let added=0;
+        for(let i=1;i<rows.length;i++){
+            let roll=rows[i][rollCol]?String(rows[i][rollCol]).trim():"";
+            if(!roll) continue;
+            if(studentData.find(s=>s.roll===roll)) continue;
+            let hall=(hallCol!==-1&&rows[i][hallCol])?String(rows[i][hallCol]).trim():"CSE Hall";
+            let branch=(branchCol!==-1&&rows[i][branchCol])?String(rows[i][branchCol]).trim():"CSE";
+            let name=(nameCol!==-1&&rows[i][nameCol])?String(rows[i][nameCol]).trim():"";
+            studentData.push({roll,hall,branch,name});
+            added++;
+        }
+        saveToLocal(); loadAllData(); alert(`✅ Imported ${added} new students.`);
+    };
+    reader.readAsArrayBuffer(file);
+    e.target.value='';
+}
+if(localStorage.getItem('adminLoggedIn')!=='true') window.location.href='admin-login.html';
+loadAllData();
+</script>
+</body>
+</html>
