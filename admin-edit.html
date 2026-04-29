@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Student | Admin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#eef2f7;font-family:'Segoe UI',sans-serif;padding:20px}
+.card{max-width:500px;margin:auto;background:white;border-radius:28px;padding:2rem;box-shadow:0 10px 25px rgba(0,0,0,0.1)}
+h2{color:#0b2b40;margin-bottom:1rem}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:40px}
+input[readonly]{background:#f0f0f0}
+button{width:100%;padding:12px;background:#0b2b40;color:white;border:none;border-radius:40px;cursor:pointer;font-weight:bold}
+.btn-back{background:#4a627a;margin-top:10px}
+.msg{margin-top:10px;text-align:center}
+</style>
+</head>
+<body>
+<div class="card">
+<h2>✏️ Edit Student</h2>
+<input type="text" id="rollNumber" readonly>
+<input type="text" id="hall" placeholder="Hall Number">
+<input type="text" id="branch" placeholder="Branch">
+<input type="text" id="name" placeholder="Name">
+<button onclick="updateStudent()">💾 Update Student</button>
+<button class="btn-back" onclick="location.href='admin-dashboard.html'">← Back to Dashboard</button>
+<div id="msg" class="msg"></div>
+</div>
+<script>
+let idx=localStorage.getItem('editIndex');
+let data=JSON.parse(localStorage.getItem('studentData'))||[];
+if(idx!==null && data[idx]){
+    document.getElementById('rollNumber').value=data[idx].roll;
+    document.getElementById('hall').value=data[idx].hall;
+    document.getElementById('branch').value=data[idx].branch;
+    document.getElementById('name').value=data[idx].name||'';
+} else {
+    document.getElementById('msg').innerHTML='<span style="color:red">❌ No student found</span>';
+}
+function updateStudent(){
+    let hall=document.getElementById('hall').value.trim();
+    let branch=document.getElementById('branch').value.trim();
+    let name=document.getElementById('name').value.trim();
+    if(!hall||!branch){ document.getElementById('msg').innerHTML='<span style="color:red">❌ Hall and Branch required!</span>'; return; }
+    data[idx].hall=hall; data[idx].branch=branch; data[idx].name=name;
+    localStorage.setItem('studentData',JSON.stringify(data));
+    document.getElementById('msg').innerHTML='<span style="color:green">✅ Updated!</span>';
+    setTimeout(()=>{ window.location.href='admin-dashboard.html'; },1000);
+}
+</script>
+</body>
+</html>
