@@ -1,1 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall Result | CSE Dept</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:linear-gradient(135deg,#0b2b40,#1a4a6f);min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',sans-serif;padding:20px}
+        .card{max-width:550px;background:white;border-radius:28px;padding:2rem;box-shadow:0 20px 40px rgba(0,0,0,0.2);text-align:center}
+        .success-icon{font-size:4rem;margin-bottom:1rem}
+        h2{color:#0b2b40;margin-bottom:0.5rem}
+        .details{background:#f0f5fa;border-radius:20px;padding:1.5rem;margin:1.5rem 0;text-align:left}
+        .detail-row{margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px dashed #ccc}
+        .label{font-weight:bold;color:#0b2b40;display:inline-block;width:110px}
+        .value{color:#2c7da0;font-weight:bold}
+        .badge{background:#ff9142;display:inline-block;padding:8px 20px;border-radius:40px;font-weight:bold}
+        .btn{background:#0b2b40;color:white;border:none;padding:10px 25px;border-radius:40px;cursor:pointer;font-weight:bold;margin:0.5rem}
+        .btn-back{background:#4a627a}
+        small{display:block;margin-top:1rem;color:#4a627a}
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="success-icon">✅📍</div>
+    <h2>Hall Allocation Details</h2>
+    <p>Internal Assessment Test – II | 17 April 2026 (AN)</p>
+    <div class="details" id="resultDetails">
+        <div class="detail-row"><span class="label">📌 Roll Number:</span><span class="value" id="rollDisplay">-</span></div>
+        <div class="detail-row"><span class="label">🏛️ Hall No:</span><span class="value" id="hallDisplay">-</span></div>
+        <div class="detail-row"><span class="label">📍 Hall Location:</span><span class="value" id="locationDisplay">-</span></div>
+        <div class="detail-row"><span class="label">📚 Branch:</span><span class="value" id="branchDisplay">-</span></div>
+        <div class="detail-row"><span class="label">⏰ Session:</span><span class="value">AN Session (2:00 PM - 4:00 PM)</span></div>
+        <div style="text-align:center; margin-top:10px"><span class="badge">⭐ Report 30 mins before exam</span></div>
+    </div>
+    <button class="btn" onclick="location.href='home.html'">🔍 Search Another</button>
+    <button class="btn btn-back" onclick="location.href='index.html'">🏠 Back to Home</button>
+    <small>Please carry your ID card | Ramco Institute of Technology</small>
+</div>
 
+<script>
+    const rollNumber = localStorage.getItem('rollNumber');
+    const hall = localStorage.getItem('hall');
+    const branch = localStorage.getItem('branch');
+    let locationDetail = localStorage.getItem('location');
+
+    // Auto decode location from hall code if not available
+    function autoDecodeLocation(hallCode) {
+        if(!hallCode) return "Not available";
+        
+        // Manual mapping for known halls
+        const manualMap = {
+            "A1L03": "A Block, 1st Floor, Left Side, Room 03",
+            "A1L04": "A Block, 1st Floor, Left Side, Room 04",
+            "A2L01": "A Block, 2nd Floor, Left Side, Room 01",
+            "A2L02": "A Block, 2nd Floor, Left Side, Room 02",
+            "A2L03": "A Block, 2nd Floor, Left Side, Room 03",
+            "A2L04": "A Block, 2nd Floor, Left Side, Room 04",
+            "A2R02": "A Block, 2nd Floor, Right Side, Room 02",
+            "A2R02 A": "A Block, 2nd Floor, Right Side, Room 02A",
+            "A3L01": "A Block, 3rd Floor, Left Side, Room 01",
+            "B3R02": "B Block, 3rd Floor, Right Side, Room 02",
+            "B3R03": "B Block, 3rd Floor, Right Side, Room 03",
+            "B3R04": "B Block, 3rd Floor, Right Side, Room 04",
+            "B3R05": "B Block, 3rd Floor, Right Side, Room 05",
+            "B3L02": "B Block, 3rd Floor, Left Side, Room 02",
+            "B3L04": "B Block, 3rd Floor, Left Side, Room 04",
+            "B3L05": "B Block, 3rd Floor, Left Side, Room 05",
+            "C2R04": "C Block, 2nd Floor, Right Side, Room 04",
+            "C2R05": "C Block, 2nd Floor, Right Side, Room 05",
+            "C3R04": "C Block, 3rd Floor, Right Side, Room 04",
+            "C3R05": "C Block, 3rd Floor, Right Side, Room 05",
+            "C3R03": "C Block, 3rd Floor, Right Side, Room 03",
+            "C2L02": "C Block, 2nd Floor, Left Side, Room 02",
+            "C2L03": "C Block, 2nd Floor, Left Side, Room 03",
+            "C2L04": "C Block, 2nd Floor, Left Side, Room 04",
+            "C3L01": "C Block, 3rd Floor, Left Side, Room 01",
+            "BOL01": "B Block, 1st Floor, Online Lab 01",
+            "BOL03": "B Block, 1st Floor, Online Lab 03",
+            "Language Lab": "Language Lab Building, Ground Floor",
+            "Civil SH": "Civil Department Seminar Hall, Ground Floor",
+            "CSE SH": "CSE Department Seminar Hall, 1st Floor",
+            "EEE SH": "EEE Department Seminar Hall, Ground Floor",
+            "ECE SH": "ECE Department Seminar Hall, 1st Floor"
+        };
+        
+        if(manualMap[hallCode]) return manualMap[hallCode];
+        
+        // Auto decode for pattern like C3R04
+        if(hallCode.length >= 4) {
+            const block = hallCode.charAt(0);
+            const floor = hallCode.charAt(1);
+            const side = hallCode.charAt(2);
+            const room = hallCode.substring(3);
+            
+            let blockName = block === 'A' ? "A Block" : block === 'B' ? "B Block" : block === 'C' ? "C Block" : "";
+            let floorName = floor === '1' ? "1st Floor" : floor === '2' ? "2nd Floor" : floor === '3' ? "3rd Floor" : "";
+            let sideName = side === 'L' ? "Left Side" : side === 'R' ? "Right Side" : "";
+            
+            if(blockName && floorName && sideName && room) {
+                return `${blockName}, ${floorName}, ${sideName}, Room ${room}`;
+            }
+        }
+        return hallCode;
+    }
+
+    if (rollNumber && hall && branch) {
+        document.getElementById('rollDisplay').innerText = rollNumber;
+        document.getElementById('hallDisplay').innerText = hall;
+        document.getElementById('branchDisplay').innerText = branch;
+        
+        // If location not available in localStorage, auto decode from hall code
+        if(!locationDetail || locationDetail === "undefined" || locationDetail === "null") {
+            locationDetail = autoDecodeLocation(hall);
+        }
+        document.getElementById('locationDisplay').innerHTML = locationDetail;
+    } else {
+        document.getElementById('resultDetails').innerHTML = `
+            <div style="text-align:center; color:#b33;">
+                ❌ No data found.<br><br>
+                Please go back and search again.
+            </div>
+        `;
+    }
+</script>
+</body>
+</html>
